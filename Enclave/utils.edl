@@ -1,0 +1,8 @@
+enclave {
+	include "types.h"
+
+	untrusted {
+		void uprint([in, string] const char *str);
+	};
+
+};

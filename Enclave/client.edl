@@ -1,0 +1,8 @@
+enclave {
+	include "types.h"
+
+	trusted {
+	    public void init_client();
+	};
+
+};

@@ -1,0 +1,62 @@
+
+enclave {
+  from "client.edl" import *;
+  from "sgx_tsgxssl.edl" import *;
+  from "database/sqlite3.edl" import *;
+  from "utils.edl" import *;
+	include "types.h"
+
+  trusted {
+    public void enclave_init();
+
+    public void auth_do_request(
+      int step,
+      [in, string] const char *body,
+      int client_id,
+      [out] int* response_length
+    );
+
+    public void auth_get_response(
+      [in, out, string] char *data,
+      [out] int* status_code
+    );
+
+    public void request_do_request(
+      [in, string] char *method, 
+      [in, string] char *uri, 
+      [in, string] char *headers,
+      [in, string] char *jwe,
+      [in, string] const char *data, 
+      [out] int* response_length
+    );
+
+    public void request_get_response(
+      [in, out, string] char *data, 
+      [out] int* in_body,
+      [out] int* status_code
+    );
+
+  };
+
+  untrusted {
+    
+    void ocall_save_data(
+      [in, size=len] char *data,
+      size_t len,
+      [in, string] const char *filename
+    );
+
+    void ocall_load_data(
+      [in, out, size=len] char *data,
+      size_t len,
+      [in, string] const char *filename
+    );
+
+    void ocall_get_data_size(
+      [in, string] const char *filename,
+      [out] size_t *len
+    );
+
+  };
+
+};
